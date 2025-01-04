@@ -7,11 +7,13 @@ datasource db {
   url      = "file:./dev.db"
 }
 
+ // Start of Selection
 model Admin {
   id        Int      @id @default(autoincrement())
   name      String
+  taxId     String?  @unique
   password  String
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(dbgenerated("(DATETIME('now', 'localtime'))"))
 
   sales     Sale[]   @relation("AdminSales")
 }
@@ -22,7 +24,7 @@ model Client {
   phone     String?
   address   String?
   taxId     String? @unique
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(dbgenerated("(DATETIME('now', 'localtime'))"))
   
   sales     Sale[]   @relation("ClientSales")
 }
@@ -33,7 +35,7 @@ model Product {
   description String?
   quantity  Int
   price     Float
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(dbgenerated("(DATETIME('now', 'localtime'))"))
   
   sales     Sale[]   @relation("ProductSales")
 }
@@ -45,7 +47,7 @@ model Sale {
   sellerId  Int
   quantity  Int
   total     Float
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(dbgenerated("(DATETIME('now', 'localtime'))"))
 
   client    Client   @relation("ClientSales", fields: [clientId], references: [id])
   product   Product  @relation("ProductSales", fields: [productId], references: [id])
