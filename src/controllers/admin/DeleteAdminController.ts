@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { deleteAdminService } from "../services/admin/deleteAdminService";
+import { deleteAdminService } from "../../services/admin/deleteAdminService";
 
 export const deleteAdminController = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id);

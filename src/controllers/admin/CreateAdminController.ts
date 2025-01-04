@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { createAdminService } from "../services/admin/createAdminService";
-import { AdminCreate } from "../zod/admin.Schema";
+import { createAdminService } from "../../services/admin/createAdminService";
+import { AdminCreate } from "../../zod/admin.Schema";
 
 export const createAdminController = async (req: Request, res: Response) => {
   const { name, password, taxId }: AdminCreate = req.body;

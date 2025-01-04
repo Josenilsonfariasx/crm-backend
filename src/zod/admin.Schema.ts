@@ -22,10 +22,11 @@ export const AdminUpdateSchema = adminSchema.omit({ createdAt: true });
 export const AdminDeleteSchema = adminSchema.omit({ name: true, password: true, createdAt: true });
 export const AdminReadSchema = adminSchema.omit({ name: true, password: true, createdAt: true });
 export const AdminPartialUpdateSchema = adminSchema.omit({ id: true, createdAt: true }).partial();
-
+export const AdminAuthSchema = adminSchema.omit({ id: true, createdAt: true, name: true });
 // Definindo os tipos
 export type Admin = z.infer<typeof adminSchema>;
 export type AdminCreate = z.infer<typeof AdminCreateSchema>;
 export type AdminUpdate = z.infer<typeof AdminUpdateSchema>;
 export type AdminDelete = z.infer<typeof AdminDeleteSchema>;
 export type AdminRead = z.infer<typeof AdminReadSchema>;
+export type AdminAuth = z.infer<typeof AdminAuthSchema>;

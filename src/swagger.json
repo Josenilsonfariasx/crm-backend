@@ -1,0 +1,233 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API CRM",
+    "version": "1.0.0",
+    "description": "Documentação da API para o Backend do CRM. Esta API permite gerenciar administradores do sistema."
+  },
+  "paths": {
+    "/admin": {
+      "get": {
+        "tags": ["Admin"],
+        "summary": "Listar todos os administradores",
+        "responses": {
+          "200": {
+            "description": "Lista de administradores recuperada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AdminResponse"
+                  }
+                },
+                "examples": {
+                  "example1": {
+                    "value": [
+                      {
+                        "id": 1,
+                        "name": "João Silva",
+                        "taxId": "12345678901",
+                        "createdAt": "2023-01-01T12:00:00Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/create": {
+      "post": {
+        "tags": ["Admin"],
+        "summary": "Criar um novo administrador",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminCreate"
+              },
+              "examples": {
+                "example1": {
+                  "value": {
+                    "name": "Maria Oliveira",
+                    "taxId": "10987654321",
+                    "password": "senhaSegura123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Administrador criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminResponse"
+                },
+                "examples": {
+                  "example1": {
+                    "value": {
+                      "id": 2,
+                      "name": "Maria Oliveira",
+                      "taxId": "10987654321",
+                      "createdAt": "2023-01-02T12:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Entrada inválida ou CPF já existe"
+          }
+        }
+      }
+    },
+    "/admin/{id}": {
+      "patch": {
+        "tags": ["Admin"],
+        "summary": "Atualizar um administrador",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminUpdate"
+              },
+              "examples": {
+                "example1": {
+                  "value": {
+                    "name": "João Silva Atualizado",
+                    "taxId": "12345678901"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Administrador atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Administrador não encontrado"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Admin"],
+        "summary": "Excluir um administrador",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Administrador excluído com sucesso"
+          },
+          "404": {
+            "description": "Administrador não encontrado"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AdminCreate": {
+        "type": "object",
+        "required": ["name", "taxId", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "description": "Nome do administrador"
+          },
+          "taxId": {
+            "type": "string",
+            "minLength": 11,
+            "maxLength": 11,
+            "description": "CPF do administrador"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "description": "Senha do administrador"
+          }
+        }
+      },
+      "AdminUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "description": "Nome do administrador (opcional)"
+          },
+          "taxId": {
+            "type": "string",
+            "minLength": 11,
+            "maxLength": 11,
+            "description": "CPF do administrador (opcional)"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "description": "Senha do administrador (opcional)"
+          }
+        }
+      },
+      "AdminResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID do administrador"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do administrador"
+          },
+          "taxId": {
+            "type": "string",
+            "description": "CPF do administrador"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de criação do administrador"
+          }
+        }
+      }
+    }
+  }
+}
