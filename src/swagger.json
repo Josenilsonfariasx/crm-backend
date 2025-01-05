@@ -956,6 +956,46 @@
           }
         }
       }
+    },
+    "/filters/product/expired": {
+      "get": {
+        "tags": ["Filters"],
+        "summary": "Listar produtos com validade expirada",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de produtos com validade expirada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductResponse"
+                  }
+                },
+                "examples": {
+                  "example1": {
+                    "value": [
+                      {
+                        "id": 1,
+                        "name": "Produto Vencido",
+                        "description": "Descrição do produto vencido",
+                        "quantity": 10,
+                        "price": 15.99,
+                        "validity": "2024-01-01T00:00:00.000Z",
+                        "createdAt": "2023-12-01T00:00:00.000Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado - Token inválido ou ausente"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1143,6 +1183,12 @@
             "type": "number",
             "minimum": 0,
             "description": "Preço do produto"
+          },
+          "validity": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de validade do produto (opcional)",
+            "example": "2025-01-06T13:35:25.000Z"
           }
         }
       },
@@ -1167,6 +1213,11 @@
             "type": "number",
             "minimum": 0,
             "description": "Preço do produto (opcional)"
+          },
+          "validity": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de validade do produto (opcional)"
           }
         }
       },
@@ -1197,6 +1248,11 @@
             "type": "string",
             "format": "date-time",
             "description": "Data de criação do produto"
+          },
+          "validity": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de validade do produto"
           }
         }
       },
