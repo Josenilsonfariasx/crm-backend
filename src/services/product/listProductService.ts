@@ -10,6 +10,7 @@ export const listProductService = async (page: number = 1, limit: number = 10) =
       description: true,
       quantity: true,
       price: true,
+      validity: true,
       createdAt: true,
     },
   });

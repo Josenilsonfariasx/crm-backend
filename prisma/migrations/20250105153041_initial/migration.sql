@@ -24,6 +24,7 @@ CREATE TABLE "Product" (
     "description" TEXT,
     "quantity" INTEGER NOT NULL,
     "price" REAL NOT NULL,
+    "validity" DATETIME NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT (DATETIME('now', 'localtime'))
 );
 

@@ -35,6 +35,7 @@ model Product {
   description String?
   quantity  Int
   price     Float
+  validity  DateTime
   createdAt DateTime @default(dbgenerated("(DATETIME('now', 'localtime'))"))
   
   sales     Sale[]   @relation("ProductSales")

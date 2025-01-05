@@ -6,6 +6,7 @@ export const productSchema = z.object({
   description: z.string().optional(),
   quantity: z.number().min(0, { message: "A quantidade não pode ser negativa" }),
   price: z.number().min(0, { message: "O preço não pode ser negativo" }),
+  validity: z.string().or(z.date()).optional(),
   createdAt: z.date().optional(),
 });
 
