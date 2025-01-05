@@ -698,6 +698,90 @@
           }
         }
       }
+    },
+    "/sale": {
+      "get": {
+        "tags": ["Sale"],
+        "summary": "Listar todas as vendas",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de vendas recuperada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "sales": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/SaleResponse"
+                      }
+                    },
+                    "totalSales": {
+                      "type": "integer"
+                    },
+                    "totalPages": {
+                      "type": "integer"
+                    },
+                    "currentPage": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sale/create": {
+      "post": {
+        "tags": ["Sale"],
+        "summary": "Criar uma nova venda",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaleCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Venda criada com sucesso"
+          },
+          "400": {
+            "description": "Quantidade insuficiente em estoque"
+          },
+          "404": {
+            "description": "Produto ou cliente não encontrado"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -939,6 +1023,82 @@
             "type": "string",
             "format": "date-time",
             "description": "Data de criação do produto"
+          }
+        }
+      },
+      "SaleCreate": {
+        "type": "object",
+        "required": ["clientId", "productId", "quantity"],
+        "properties": {
+          "clientId": {
+            "type": "integer",
+            "description": "ID do cliente"
+          },
+          "productId": {
+            "type": "integer",
+            "description": "ID do produto"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Quantidade vendida"
+          }
+        }
+      },
+      "SaleResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "clientId": {
+            "type": "integer"
+          },
+          "productId": {
+            "type": "integer"
+          },
+          "sellerId": {
+            "type": "integer"
+          },
+          "quantity": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "number"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "client": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "taxId": {
+                "type": "string"
+              }
+            }
+          },
+          "product": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "price": {
+                "type": "number"
+              }
+            }
+          },
+          "seller": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            }
           }
         }
       }
