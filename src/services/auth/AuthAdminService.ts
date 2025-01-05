@@ -20,6 +20,7 @@ export const AuthAdminService = async ({ taxId, password }: AdminAuth) => {
     {
       name: admin!.name,
       taxId: admin!.taxId,
+      id: admin!.id,
     },
     process.env.JWT_SECRET!,
     {
