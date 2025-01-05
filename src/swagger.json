@@ -204,29 +204,73 @@
         "tags": ["Client"],
         "summary": "Listar todos os clientes",
         "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "description": "Número da página"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            },
+            "description": "Quantidade de itens por página"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Lista de clientes recuperada com sucesso",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ClientResponse"
+                  "type": "object",
+                  "properties": {
+                    "clients": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ClientResponse"
+                      }
+                    },
+                    "totalClients": {
+                      "type": "integer",
+                      "description": "Total de clientes cadastrados"
+                    },
+                    "totalPages": {
+                      "type": "integer",
+                      "description": "Total de páginas disponíveis"
+                    },
+                    "currentPage": {
+                      "type": "integer",
+                      "description": "Página atual"
+                    }
                   }
                 },
                 "examples": {
                   "example1": {
-                    "value": [
-                      {
-                        "id": 1,
-                        "name": "João Cliente",
-                        "taxId": "12345678901",
-                        "phone": "11999999999",
-                        "address": "Rua Exemplo, 123",
-                        "createdAt": "2023-01-01T12:00:00Z"
-                      }
-                    ]
+                    "value": {
+                      "clients": [
+                        {
+                          "id": 1,
+                          "name": "João Cliente",
+                          "taxId": "12345678901",
+                          "phone": "11999999999",
+                          "address": "Rua Exemplo, 123",
+                          "createdAt": "2024-01-01T12:00:00Z"
+                        }
+                      ],
+                      "totalClients": 50,
+                      "totalPages": 5,
+                      "currentPage": 1
+                    }
                   }
                 }
               }
