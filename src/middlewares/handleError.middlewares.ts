@@ -19,7 +19,5 @@ export const handleErrors: ErrorRequestHandler = (error: unknown, req, res, next
     return;
   }
 
-  console.log(error);
-
   res.status(500).json({ message: "Internal server error" });
 };
