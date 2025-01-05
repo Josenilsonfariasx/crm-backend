@@ -109,16 +109,6 @@ http://localhost:3333/api-docs
 - [ ] Implementar sistema de fidelidade
 - [ ] Adicionar suporte a múltiplas filiais
 
-## 🤝 Contribuindo
-
-Contribuições são sempre bem-vindas! Para contribuir:
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
-
 ## 👨‍💻 Desenvolvedor
 
 <div align="center">
@@ -127,7 +117,7 @@ Contribuições são sempre bem-vindas! Para contribuir:
   <a href="https://github.com/Josenilsonfariasx">
     <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"/>
   </a>
-  <a href="https://www.linkedin.com/in/josenilson-farias-b602b8248/">
+  <a href="https://www.linkedin.com/in/josenilsonfarias/">
     <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"/>
   </a>
   <h3>Josenilson Farias</h3>
