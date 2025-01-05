@@ -5,6 +5,32 @@
     "version": "1.0.0",
     "description": "Documentação da API para o Backend do CRM. Esta API permite gerenciar administradores e clientes do sistema."
   },
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Operações relacionadas a autenticação"
+    },
+    {
+      "name": "Admin",
+      "description": "Operações relacionadas a administradores"
+    },
+    {
+      "name": "Client",
+      "description": "Operações relacionadas a clientes"
+    },
+    {
+      "name": "Product",
+      "description": "Operações relacionadas a produtos"
+    },
+    {
+      "name": "Sale",
+      "description": "Operações relacionadas a vendas"
+    },
+    {
+      "name": "Filters",
+      "description": "Filtros para busca de produtos"
+    }
+  ],
   "paths": {
     "/admin/auth": {
       "post": {
@@ -779,6 +805,59 @@
           },
           "404": {
             "description": "Produto ou cliente não encontrado"
+          }
+        }
+      }
+    },
+    "/product/search": {
+      "get": {
+        "tags": ["Filters"],
+        "summary": "Buscar produtos com filtros",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "description": "Nome do produto para busca (opcional)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "minPrice",
+            "in": "query",
+            "required": false,
+            "description": "Preço mínimo do produto (opcional)",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "maxPrice",
+            "in": "query",
+            "required": false,
+            "description": "Preço máximo do produto (opcional)",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de produtos filtrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProductResponse"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Erro de validação, pelo menos um filtro deve ser fornecido"
           }
         }
       }
