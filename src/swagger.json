@@ -3,9 +3,48 @@
   "info": {
     "title": "API CRM",
     "version": "1.0.0",
-    "description": "Documentação da API para o Backend do CRM. Esta API permite gerenciar administradores do sistema."
+    "description": "Documentação da API para o Backend do CRM. Esta API permite gerenciar administradores e clientes do sistema."
   },
   "paths": {
+    "/admin/auth": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Autenticar um administrador",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdminAuth"
+              },
+              "examples": {
+                "example1": {
+                  "value": {
+                    "taxId": "12345678901",
+                    "password": "senhaSegura123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Autenticação bem-sucedida",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Usuário ou senha incorretos"
+          }
+        }
+      }
+    },
     "/admin": {
       "get": {
         "tags": ["Admin"],
@@ -159,10 +198,190 @@
           }
         }
       }
+    },
+    "/client": {
+      "get": {
+        "tags": ["Client"],
+        "summary": "Listar todos os clientes",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de clientes recuperada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClientResponse"
+                  }
+                },
+                "examples": {
+                  "example1": {
+                    "value": [
+                      {
+                        "id": 1,
+                        "name": "João Cliente",
+                        "taxId": "12345678901",
+                        "phone": "11999999999",
+                        "address": "Rua Exemplo, 123",
+                        "createdAt": "2023-01-01T12:00:00Z"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado - Token inválido ou ausente"
+          }
+        }
+      }
+    },
+    "/client/create": {
+      "post": {
+        "tags": ["Client"],
+        "summary": "Criar um novo cliente",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientCreate"
+              },
+              "examples": {
+                "example1": {
+                  "value": {
+                    "name": "Maria Cliente",
+                    "taxId": "98765432101",
+                    "phone": "11988888888",
+                    "address": "Av Principal, 456"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cliente criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Entrada inválida ou CPF já existe"
+          },
+          "401": {
+            "description": "Não autorizado - Token inválido ou ausente"
+          }
+        }
+      }
+    },
+    "/client/{id}": {
+      "patch": {
+        "tags": ["Client"],
+        "summary": "Atualizar um cliente",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClientUpdate"
+              },
+              "examples": {
+                "example1": {
+                  "value": {
+                    "name": "João Cliente Atualizado",
+                    "phone": "11977777777"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Cliente atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Cliente não encontrado"
+          },
+          "401": {
+            "description": "Não autorizado - Token inválido ou ausente"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Client"],
+        "summary": "Excluir um cliente",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cliente excluído com sucesso"
+          },
+          "404": {
+            "description": "Cliente não encontrado"
+          },
+          "401": {
+            "description": "Não autorizado - Token inválido ou ausente"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AdminAuth": {
+        "type": "object",
+        "required": ["taxId", "password"],
+        "properties": {
+          "taxId": {
+            "type": "string",
+            "minLength": 11,
+            "maxLength": 11,
+            "description": "CPF do administrador"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "description": "Senha do administrador"
+          }
+        }
+      },
       "AdminCreate": {
         "type": "object",
         "required": ["name", "taxId", "password"],
@@ -227,6 +446,92 @@
             "description": "Data de criação do administrador"
           }
         }
+      },
+      "ClientCreate": {
+        "type": "object",
+        "required": ["name", "taxId"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "description": "Nome do cliente"
+          },
+          "taxId": {
+            "type": "string",
+            "minLength": 11,
+            "maxLength": 11,
+            "description": "CPF do cliente"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Telefone do cliente"
+          },
+          "address": {
+            "type": "string",
+            "description": "Endereço do cliente"
+          }
+        }
+      },
+      "ClientUpdate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "description": "Nome do cliente (opcional)"
+          },
+          "taxId": {
+            "type": "string",
+            "minLength": 11,
+            "maxLength": 11,
+            "description": "CPF do cliente (opcional)"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Telefone do cliente (opcional)"
+          },
+          "address": {
+            "type": "string",
+            "description": "Endereço do cliente (opcional)"
+          }
+        }
+      },
+      "ClientResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID do cliente"
+          },
+          "name": {
+            "type": "string",
+            "description": "Nome do cliente"
+          },
+          "taxId": {
+            "type": "string",
+            "description": "CPF do cliente"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Telefone do cliente"
+          },
+          "address": {
+            "type": "string",
+            "description": "Endereço do cliente"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Data de criação do cliente"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
