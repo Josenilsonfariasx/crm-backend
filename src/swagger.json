@@ -809,39 +809,44 @@
         }
       }
     },
-    "/product/search": {
-      "get": {
+    "/filters/product": {
+      "post": {
         "tags": ["Filters"],
         "summary": "Buscar produtos com filtros",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "query",
-            "required": false,
-            "description": "Nome do produto para busca (opcional)",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "minPrice",
-            "in": "query",
-            "required": false,
-            "description": "Preço mínimo do produto (opcional)",
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "maxPrice",
-            "in": "query",
-            "required": false,
-            "description": "Preço máximo do produto (opcional)",
-            "schema": {
-              "type": "number"
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Nome do produto para busca (opcional)"
+                  },
+                  "minPrice": {
+                    "type": "number",
+                    "description": "Preço mínimo do produto (opcional)"
+                  },
+                  "maxPrice": {
+                    "type": "number",
+                    "description": "Preço máximo do produto (opcional)"
+                  }
+                }
+              },
+              "examples": {
+                "example1": {
+                  "value": {
+                    "name": "Arroz",
+                    "minPrice": 10,
+                    "maxPrice": 50
+                  }
+                }
+              }
             }
           }
-        ],
+        },
         "responses": {
           "200": {
             "description": "Lista de produtos filtrados",
@@ -856,8 +861,98 @@
               }
             }
           },
-          "400": {
-            "description": "Erro de validação, pelo menos um filtro deve ser fornecido"
+          "401": {
+            "description": "Não autorizado - Token inválido ou ausente"
+          }
+        }
+      }
+    },
+    "/filters/dashboard": {
+      "get": {
+        "tags": ["Filters"],
+        "summary": "Obter informações para o dashboard",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Informações do dashboard recuperadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Informações gerais": {
+                      "type": "object",
+                      "properties": {
+                        "Total de clientes": {
+                          "type": "integer"
+                        },
+                        "Total de produtos": {
+                          "type": "integer"
+                        },
+                        "Total de vendas": {
+                          "type": "integer"
+                        },
+                        "Total de receita": {
+                          "type": "number"
+                        }
+                      }
+                    },
+                    "Produto mais vendido": {
+                      "type": "string"
+                    },
+                    "Vendas por produto": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "integer"
+                      }
+                    },
+                    "Melhor cliente": {
+                      "type": "object",
+                      "properties": {
+                        "Nome": {
+                          "type": "string"
+                        },
+                        "Total de compras": {
+                          "type": "integer"
+                        },
+                        "Valor total gasto": {
+                          "type": "number"
+                        },
+                        "Produto mais comprado": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "example1": {
+                    "value": {
+                      "Informações gerais": {
+                        "Total de clientes": 50,
+                        "Total de produtos": 100,
+                        "Total de vendas": 200,
+                        "Total de receita": 15000.5
+                      },
+                      "Produto mais vendido": "O produto mais vendido nos últimos 30 dias foi Arroz com 50 vendas.",
+                      "Vendas por produto": {
+                        "Arroz": 50,
+                        "Feijão": 30
+                      },
+                      "Melhor cliente": {
+                        "Nome": "João Silva",
+                        "Total de compras": 15,
+                        "Valor total gasto": 1500.75,
+                        "Produto mais comprado": "Arroz (8 vezes)"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Não autorizado - Token inválido ou ausente"
           }
         }
       }
