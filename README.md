@@ -38,6 +38,26 @@ Sistema de gerenciamento de vendas e controle de clientes desenvolvido com Node.
   - Melhores clientes
   - Total de vendas e receita
 
+## 🛠 Cache System ⚡
+
+O sistema implementa um mecanismo de cache utilizando Redis para otimizar o desempenho e reduzir a carga no banco de dados.
+
+### Benefícios do Cache:
+
+- **⚡ Performance**: Respostas mais rápidas para requisições frequentes
+- **📊 Redução de Carga**: Menor pressão no banco de dados
+- **🔄 Consistência**: Cache automático com duração de 30 minutos
+- **💾 Economia**: Redução no consumo de recursos do servidor
+
+### Rotas com Cache:
+
+- `/client` - Listagem de clientes
+- `/product` - Listagem de produtos
+- `/sale` - Listagem de vendas
+- `/filters/*` - Todas as rotas de filtros e dashboard
+
+O cache é automaticamente invalidado após 30 minutos, garantindo que os dados não fiquem desatualizados por muito tempo.
+
 ## 🛠️ Tecnologias Utilizadas
 
 - Node.js
@@ -102,7 +122,6 @@ http://localhost:3333/api-docs
 - [ ] Adicionar relatórios em PDF
 - [ ] Implementar sistema de metas de vendas
 - [ ] Adicionar módulo de comissões
-- [ ] Implementar cache com Redis
 - [ ] Adicionar testes automatizados
 - [ ] Implementar sistema de backup automático
 - [ ] Adicionar integração com sistemas de pagamento
